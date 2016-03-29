@@ -5,6 +5,7 @@ var flipMaster = (function ($) {
     /** 
      * Test if transition feature is available in browser
      * returns event name
+     * From: https://davidwalsh.name/css-animation-callback
      */
     function whichTransitionEvent() {
         var t,
