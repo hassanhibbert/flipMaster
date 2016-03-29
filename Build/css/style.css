@@ -1,0 +1,57 @@
+.card-container {
+    width: 222px;
+    height: 222px;
+    -webkit-perspective: 1000px;
+    -moz-perspective: 1000px;
+    -ms-perspective: 1000px;
+    perspective: 1000px;
+    -ms-transform: perspective(1000px);
+    -moz-transform: perspective(1000px);
+    -moz-transform-style: preserve-3d;
+    -ms-transform-style: preserve-3d;
+}
+
+#card-content {
+    display: block;
+    text-align: center;
+    font-family: arial;
+    color: white;
+    padding-top: 84px;
+    font-size: 24px;
+}
+
+#card-flip {
+    width: 222px;
+    height: 222px;
+    border-radius: 4px;
+    transition: 0.6s;
+    position: relative;
+    background-color: #7CC3C5;
+}
+
+.btn-styles {
+    background-color: #5166A3;
+    color: #fff;
+    border: none;
+    padding: 7px 15px;
+    border-radius: 3px;
+    font-size: 13px;
+    cursor: pointer;
+    outline: none;
+}
+
+.btn-styles:hover {
+    background-color: #6780CA;
+}
+
+.no-transition {
+    transition: none !important;
+}
+
+.f90 {
+    transform: rotateY(90deg);
+}
+
+.b90 {
+    transform: rotateY(-90deg);
+}
