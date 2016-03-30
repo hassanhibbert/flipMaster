@@ -35,13 +35,16 @@ var flipMaster = (function ($) {
     }
 
     function buttonHandler(evt) {
-        var currentBtn = evt.target;
+        var currentBtn = evt.target,
+            maxLen = contentArray.length;
 
         // Assigns forward or backward function to flipDirection depending on which button was clicked
         flipDirection = (currentBtn.id === 'btnF') ? flipForward : flipBackward;
 
-        // prevents back flip animation if current content is 0
-        if (pos <= 0 && flipDirection(true) === 'b90') return;
+        // prevents back flip animation if current content is 0, or front flip if it reaches the end length of content array
+        if ((pos <= 0 && flipDirection(true) === 'b90') || (pos + 1 === maxLen && flipDirection(true) === 'f90')) {
+            return;
+        }
 
         flipDirection();
 
@@ -120,7 +123,9 @@ var flipMaster = (function ($) {
         insertContent(contentArray[0]);
 
         // listen for transition-end events
-        if (transitionEvent) $cardFlip.bind(transitionEvent, animationEndHandler);
+        if (transitionEvent) {
+            $cardFlip.bind(transitionEvent, animationEndHandler);
+        }
 
         // listen for clicks on back button
         $backBtn.bind('click', buttonHandler);
