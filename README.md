@@ -38,8 +38,6 @@ __Sample HTML Setup:__
     </div>
 </div>
 
-<br>
-
 <button id="btnB" class="btn-styles"> Flip Backward </button>
 <button id="btnF" class="btn-styles"> Flip Forward </button>
 ```
