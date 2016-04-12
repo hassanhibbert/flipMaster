@@ -1,11 +1,35 @@
-/*globals jQuery, document*/
+/*globals jQuery, document*/ /* jshint -W030  */
 
-var flipMaster = (function ($) {
+var flipMaster = (function ($, document) {
     "use strict";
+    
+    var
+        // DOM references
+        $cardFlip,
+        $backBtn,
+        $forwardBtn,
+        $cardContent,
+
+        // private content data
+        contentArray = [],
+        
+        // module API
+        publicAPI,
+
+        // local vars
+        transitionEvent = whichTransitionEvent(),
+        flip,
+        classToggle,
+
+        // counters
+        count = 0,
+        pos = 0;
+    
     /** 
-     * Test if transition feature is available in browser
-     * returns event name
+     * Test if transition feature is available in browser returns event name
      * From: https://davidwalsh.name/css-animation-callback
+     *
+     * @return {string} event name available in browser
      */
     function whichTransitionEvent() {
         var t,
@@ -24,64 +48,94 @@ var flipMaster = (function ($) {
     }
 
     /** 
-     * If myClass = true, then return the className else add classname to flip element 
+     * Returns class name or adds class to flip element
+     *
+     * @param {boolean} true to get class name false/undefined to add class
      */
-    function flipForward(myClass) {
-        return (myClass) ? 'f90' : $cardFlip.addClass('f90');
+    function flipForward(getClassName) {
+        return (getClassName) ? 'f90' : $cardFlip.addClass('f90');
     }
-
-    function flipBackward(myClass) {
-        return (myClass) ? 'b90' : $cardFlip.addClass('b90');
+    
+    /** 
+     * Returns class name or adds class to flip element
+     *
+     * @param {boolean} true to get class name false/undefined to add class
+     */
+    function flipBackward(getClassName) {
+        return (getClassName) ? 'b90' : $cardFlip.addClass('b90');
     }
-
+    
+    /** 
+     * Button handler 
+     */
     function buttonHandler(evt) {
         var currentBtn = evt.target,
             maxLen = contentArray.length;
 
-        // Assigns forward or backward function to flipDirection depending on which button was clicked
-        flipDirection = (currentBtn.id === 'btnF') ? flipForward : flipBackward;
+        // Assigns forward or backward function to flip depending on which button was clicked
+        flip = (currentBtn.id === 'btnF') ? flipForward : flipBackward;
 
         // prevents back flip animation if current content is 0, or front flip if it reaches the end length of content array
-        if ((pos <= 0 && flipDirection(true) === 'b90') || (pos + 1 === maxLen && flipDirection(true) === 'f90')) {
+        if ((pos <= 0 && flip(true) === 'b90') || 
+            (pos + 1 === maxLen && flip(true) === 'f90')) {
             return;
         }
 
-        flipDirection();
+        flip();
 
-        // unbind event listeners so that animation can complete if button is rapidly clicked
+        // unbind event listeners until animation is complete
         $backBtn.unbind('click', buttonHandler);
         $forwardBtn.unbind('click', buttonHandler);
     }
-
+    
+    /** 
+     * Disable animation on an element
+     *
+     * @param {string} class name 
+     */
     function disableAnimation(className) {
         classToggle = (className === 'f90') ? 'b90' : 'f90';
         $cardFlip.addClass('no-transition ' + classToggle).removeClass(className);
     }
-
-    // Removes animation classes for the final flip transition
+    
+    /** 
+     * Removes animation classes for the final flip transition
+     *
+     * @param {string} current classname to be removed
+     */
     function finishFlipAnimation(className) {
         classToggle = (className === 'f90') ? 'b90' : 'f90';
         $cardFlip.removeClass('no-transition ' + classToggle);
     }
-
-    // Force reflow/repaint of an element so the animations after this function call will work properly
+    
+    /** 
+     * Force reflow/repaint of an element so the animations after this function call will work properly 
+     */
     function triggerReflow() {
         $cardFlip.outerHeight();
     }
-
+    
+    /** 
+     * Insert content into card content element
+     *
+     * @param {string|element} string or DOM element to be inserted in card content
+     */
     function insertContent(content) {
         $cardContent.html(content);
     }
-
-    // gets the content from the content array
+    
+    /** 
+     * Gets the content from the content array
+     *
+     * @return {string|element} returns an element or string from the content array
+     */ 
     function getContent() {
         // check which button was clicked then update content position back or forward (in contentArray)
-        var updatePos = (flipDirection(true) === 'f90') ? pos++ : pos--;
+        (flip(true) === 'f90') ? pos++ : pos--;
 
-        var content = contentArray.filter(function (e, i) {
+        return contentArray.filter(function (e, i) {
             return (i === pos);
-        });
-        return content[0];
+        })[0];
     }
 
     function animationEndHandler(evt) {
@@ -96,15 +150,21 @@ var flipMaster = (function ($) {
             return;
         } else {
             // This will run on the first "TransitionEnd" event (at 90 degrees)
-            disableAnimation(flipDirection(true));
-            insertContent(getContent());
+            var content = getContent(),
+                flipClass = flip(true);
+            disableAnimation(flipClass);
+            insertContent(content);
             triggerReflow();
-            finishFlipAnimation(flipDirection(true));
+            finishFlipAnimation(flipClass);
         }
         count++;
     }
-
-    // load data from array
+    
+    /** 
+     * load data from array
+     *
+     * @param {array} array of elements or strings to be stored in an internal array
+     */
     function loadData(data) {
         for (var i = 0; i < data.length; i++) {
             contentArray.push(data[i]);
@@ -123,10 +183,8 @@ var flipMaster = (function ($) {
         insertContent(contentArray[0]);
 
         // listen for transition-end events
-        if (transitionEvent) {
-            $cardFlip.bind(transitionEvent, animationEndHandler);
-        }
-
+        transitionEvent && $cardFlip.bind(transitionEvent, animationEndHandler);
+        
         // listen for clicks on back button
         $backBtn.bind('click', buttonHandler);
 
@@ -134,29 +192,12 @@ var flipMaster = (function ($) {
         $forwardBtn.bind('click', buttonHandler);
     }
 
-    var
-        // DOM references
-        $cardFlip,
-        $backBtn,
-        $forwardBtn,
-        $cardContent,
-
-        // private content data
-        contentArray = [],
-
-        // local vars
-        transitionEvent = whichTransitionEvent(),
-        flipDirection,
-        classToggle,
-
-        // counters
-        count = 0,
-        pos = 0,
-
-        // module API
-        publicAPI = {
-            loadData: loadData,
-            init: init
-        };
+ 
+    publicAPI = {
+        loadData: loadData,
+        init: init
+    };
+    
     return publicAPI;
-})(jQuery);
+    
+})(jQuery, document);
