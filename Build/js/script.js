@@ -39,7 +39,7 @@
     });
 
     // array that will contain content for card flip
-    var cardInfoArray = [];
+    var cardInfoArray = []; 
 
     // load card content on success from ajax request
     function loadContentCard(data) {

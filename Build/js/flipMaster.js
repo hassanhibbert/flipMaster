@@ -71,7 +71,7 @@ var flipMaster = (function ($, document) {
     /** 
      * Button handler 
      */
-    
+
     function buttonHandler(evt) {
 
         var currentBtn = evt.target,
@@ -153,25 +153,27 @@ var flipMaster = (function ($, document) {
     }
 
     function animationEndHandler(evt) {
-        if (count >= 1) {
-            // This will run on the second "TransitionEnd" event 
-            // when the "finishFlipAnimation()" is done
-            count = 0; // reset counter
+        if (evt.originalEvent.propertyName === 'transform') {
+            if (count >= 1) {
+                // This will run on the second "TransitionEnd" event
+                // when the "finishFlipAnimation()" is done
+                count = 0; // reset counter
 
-            // bind button listeners when animation is fully completed
-            $backBtn.bind('click', buttonHandler);
-            $forwardBtn.bind('click', buttonHandler);
-            return;
-        } else {
-            // This will run on the first "TransitionEnd" event (at 90 degrees)
-            var content = getContent(),
-                flipClass = flip(true);
-            disableAnimation(flipClass);
-            insertContent(content);
-            triggerReflow();
-            finishFlipAnimation(flipClass);
+                // bind button listeners when animation is fully completed
+                $backBtn.bind('click', buttonHandler);
+                $forwardBtn.bind('click', buttonHandler);
+                return;
+            } else {
+                // This will run on the first "TransitionEnd" event (at 90 degrees)
+                var content = getContent(),
+                    flipClass = flip(true);
+                disableAnimation(flipClass);
+                insertContent(content);
+                triggerReflow();
+                finishFlipAnimation(flipClass);
+            }
+            count++;
         }
-        count++;
     }
     
     /** 
