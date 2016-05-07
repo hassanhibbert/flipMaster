@@ -20,6 +20,7 @@ var flipMaster = (function ($, document) {
         transitionEvent = whichTransitionEvent(),
         flip,
         classToggle,
+        infiniteFlip = false,
 
         // counters
         count = 0,
@@ -50,7 +51,8 @@ var flipMaster = (function ($, document) {
     /** 
      * Returns class name or adds class to flip element
      *
-     * @param {boolean} true to get class name false/undefined to add class
+     * @param {boolean} [getClassName] - true to get class name false/undefined to add class
+     * @return {string} className if getClassName argument is passed
      */
     function flipForward(getClassName) {
         return (getClassName) ? 'f90' : $cardFlip.addClass('f90');
@@ -59,7 +61,8 @@ var flipMaster = (function ($, document) {
     /** 
      * Returns class name or adds class to flip element
      *
-     * @param {boolean} true to get class name false/undefined to add class
+     * @param {boolean} [getClassName] - true to get class name false/undefined to add class
+     * @return {string} className if getClassName argument is passed
      */
     function flipBackward(getClassName) {
         return (getClassName) ? 'b90' : $cardFlip.addClass('b90');
@@ -68,17 +71,28 @@ var flipMaster = (function ($, document) {
     /** 
      * Button handler 
      */
+    
     function buttonHandler(evt) {
+
         var currentBtn = evt.target,
             maxLen = contentArray.length;
 
         // Assigns forward or backward function to flip depending on which button was clicked
         flip = (currentBtn.id === 'btnF') ? flipForward : flipBackward;
 
-        // prevents back flip animation if current content is 0, or front flip if it reaches the end length of content array
-        if ((pos <= 0 && flip(true) === 'b90') || 
-            (pos + 1 === maxLen && flip(true) === 'f90')) {
-            return;
+        if (infiniteFlip) {
+            // infinite flips
+            if (flip(true) === 'f90' && pos + 1 === maxLen) {
+                pos -= maxLen;
+            } else if (flip(true) === 'b90' && pos - 1 <= 0) {
+                pos = maxLen;
+            }
+        } else {
+            // prevents back flip animation if current content is 0, or front flip if it reaches the end length of content array
+            if ((pos <= 0 && flip(true) === 'b90') ||
+                (pos + 1 === maxLen && flip(true) === 'f90')) {
+                return;
+            }
         }
 
         flip();
@@ -91,7 +105,7 @@ var flipMaster = (function ($, document) {
     /** 
      * Disable animation on an element
      *
-     * @param {string} class name 
+     * @param {string} className - class name
      */
     function disableAnimation(className) {
         classToggle = (className === 'f90') ? 'b90' : 'f90';
@@ -101,7 +115,7 @@ var flipMaster = (function ($, document) {
     /** 
      * Removes animation classes for the final flip transition
      *
-     * @param {string} current classname to be removed
+     * @param {string} className - current classname to be removed
      */
     function finishFlipAnimation(className) {
         classToggle = (className === 'f90') ? 'b90' : 'f90';
@@ -118,7 +132,7 @@ var flipMaster = (function ($, document) {
     /** 
      * Insert content into card content element
      *
-     * @param {string|element} string or DOM element to be inserted in card content
+     * @param {string|HTMLElement} content - string or DOM element to be inserted in card content
      */
     function insertContent(content) {
         $cardContent.html(content);
@@ -127,7 +141,7 @@ var flipMaster = (function ($, document) {
     /** 
      * Gets the content from the content array
      *
-     * @return {string|element} returns an element or string from the content array
+     * @return {string|HTMLDivElement} returns an element or string from the content array
      */ 
     function getContent() {
         // check which button was clicked then update content position back or forward (in contentArray)
@@ -163,7 +177,7 @@ var flipMaster = (function ($, document) {
     /** 
      * load data from array
      *
-     * @param {array} array of elements or strings to be stored in an internal array
+     * @param {object} data - array of elements or strings to be stored in an internal array
      */
     function loadData(data) {
         for (var i = 0; i < data.length; i++) {
@@ -178,6 +192,8 @@ var flipMaster = (function ($, document) {
         $backBtn = $(opts.backBtn);
         $forwardBtn = $(opts.forwardBtn);
         $cardContent = $(opts.cardContent);
+
+        infiniteFlip = opts.infiniteFlip;
 
         // load initial content
         insertContent(contentArray[0]);

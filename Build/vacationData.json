@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "title": "Maui",
+    "description": "With idyllic beaches and verdant mountains, Maui is escapism at its finest. Here, you can spend your days admiring the scenery as you cruise along the Road to Hana or lounge across the sands of Kaihalulu. Sampling the island's seafood is also a must.",
+    "image_url": "http://static.travel.usnews.com/images/destinations/61/scene_from_the_road_to_hana.jpg"
+  },
+  {
+    "id": 2,
+    "title": "Yellowstone",
+    "description": "With steaming geysers, multicolored pools, bubbling hot springs and hiking trails that stretch for miles, there's plenty to excite nature lovers in this national park. Plus, animal fans will appreciate a visit to the Grizzly and Wolf Discovery Center to learn about wildlife in the area.",
+    "image_url": "http://static.travel.usnews.com/images/destinations/7/hayden.jpg"
+  },
+  {
+    "id": 3,
+    "title": "Grand Canyon",
+    "description": "To experience some of the most inspiring views America has to offer, plan a trip to the Grand Canyon. Whether you choose to hike the Bright Angel Trails or raft the Colorado River, you're sure to encounter plenty of picturesque vistas.",
+    "image_url": "http://static.travel.usnews.com/images/destinations/16/grand_canyon_main.jpg"
+  },
+  {
+    "id": 4,
+    "title": "Yosemite",
+    "description": "In Yosemite, you can check out famous landmarks like Half Dome or get some exercise hiking the John Muir Trail. Come in spring, summer or fall to avoid winter's wet weather conditions. And if you're not one for camping, you can make this park a day trip from San Francisco, Sacramento or Lake Tahoe.",
+    "image_url": "http://static.travel.usnews.com/images/destinations/94/yosemite_mirror_lake_getty_michael_h_spiva.jpg"
+  },
+  {
+    "id": 5,
+    "title": "San Francisco",
+    "description": "San Francisco's culture has been affected by diverse ethnic groups and many social movements. The best way to perceive the City by the Bay's character is to explore each individual neighborhood. From the Mission to the Castro, visitors appreciate each enclave's offerings.",
+    "image_url": "http://static.travel.usnews.com/images/destinations/20/4445013527_4c59b27863.jpg"
+  }
+]
