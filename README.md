@@ -1,6 +1,6 @@
 # flipMaster.js
 
-flipMaster.js was a fun little weekend coding project utilizing jQuery, and CSS3 animations to create a card flipping animation. Instead of the usual card flipping animation that only goes from front to back, this has a continuous flip in either direction depending on how much content is provided within an array.
+flipMaster.js is a card flipping plugin utilizing jQuery, and CSS3 animations to create a card flipping animation. Instead of the usual card flipping animation that only goes from front to back, this has a continuous flip in either direction depending on how much content is provided within an array.
 
 __Demo:__ http://hassanhibbert.github.io/flipmaster/
 
@@ -25,7 +25,8 @@ flipMaster.init({
     cardFlip: '#card-flip',
     backBtn: '#btnB',
     forwardBtn: '#btnF',
-    cardContent: '#card-content'
+    cardContent: '#card-content',
+    infiniteFlip: true
 });
 ```
 
